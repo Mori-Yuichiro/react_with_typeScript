@@ -1,7 +1,7 @@
 export type MentorType = {
     id: number,
     name: string,
-    role: 'mentor' | 'student',
+    role: 'mentor',
     email: string,
     age: number,
     postCode: string,

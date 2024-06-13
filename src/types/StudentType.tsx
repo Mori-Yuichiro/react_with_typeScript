@@ -1,7 +1,7 @@
 export type StudentType = {
     id: number,
     name: string,
-    role: 'mentor' | 'student',
+    role: 'student',
     email: string,
     age: number,
     postCode: string,
