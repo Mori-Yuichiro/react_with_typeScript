@@ -16,7 +16,6 @@ export const useMainHook = () => {
         { id: 8, name: "鈴木八郎", role: "mentor", email: "test8@happiness.com", age: 33, postCode: "100-0009", phone: "0120000008", hobbies: ["ランニング", "旅行"], url: "https://hhh.com", experienceDays: 6000, useLangs: ["Golang", "Rails"], availableStartCode: 301, availableEndCode: 505 },
     ];
 
-    // const mentorList: MentorType[] = USER_LIST.filter((user): user is MentorType => user.role === "mentor");
     const [mentorList, setMentorList] = useState<MentorType[]>(
         USER_LIST.filter((user): user is MentorType => user.role === "mentor")
     );
@@ -93,25 +92,29 @@ export const useMainHook = () => {
         } else if (selectedRole === "mentor") {
             setSelectedRole("student");
         }
+        setNewHobbies([]);
     }, [selectedRole])
 
-    const [newStudent, setNewStudent] = useState<StudentType>({
-        id: studentList.length + mentorList.length + 1,
-        name: "",
-        role: "student",
-        email: "",
-        age: 0,
-        postCode: "",
-        phone: "",
-        hobbies: [""],
-        url: "",
-        studyMinutes: 0,
-        taskCode: 0,
-        studyLangs: [""],
-        score: 0
-    });
+    const [newStudent, setNewStudent] = useState<StudentType>(
+        {
+            id: studentList.length + mentorList.length + 1,
+            name: "",
+            role: "student",
+            email: "",
+            age: 0,
+            postCode: "",
+            phone: "",
+            hobbies: [],
+            url: "",
+            studyMinutes: 0,
+            taskCode: 0,
+            studyLangs: [],
+            score: 0
+        }
+    );
+
     const [newMentor, setNewMentor] = useState<MentorType>({
-        id: 0,
+        id: studentList.length + mentorList.length + 1,
         name: "",
         role: 'mentor',
         email: "",
@@ -146,13 +149,102 @@ export const useMainHook = () => {
         setNewHobby("");
     }, [newHobbies, newHobby])
 
+    const [newStudyLangs, setNewStudyLangs] = useState<string[]>([]);
+    const [newStudyLang, setNewStudyLang] = useState<string>("");
+
+    const onChangeNewStudyLang = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewStudyLang(e.target.value);
+    }, [setNewStudyLang])
+
+    const addNewStudyLang = useCallback(() => {
+        setNewStudyLangs([...newStudyLangs, newStudyLang]);
+        setNewStudyLang("");
+    }, [newStudyLangs, newStudyLang])
+
+    // inputが空ではないか判定
+    const checkBlank = useCallback((newUser: StudentType | MentorType) => {
+        return Object.values(newUser).some(prop => typeof (prop) !== "number" && prop.length === 0);
+    }, [])
+
     const addNewStudent = useCallback(() => {
-        setNewStudent({
+        const studentData: StudentType = {
             ...newStudent,
-            hobbies: newHobbies
-        })
-        setStudentList([...studentList, newStudent]);
-    }, [newStudent, selectedRole, newHobbies])
+            hobbies: newHobbies,
+            studyLangs: newStudyLangs
+        };
+        const check: boolean = checkBlank(studentData);
+        if (!check) {
+            setStudentList([...studentList, studentData]);
+            setNewStudent(
+                {
+                    id: studentList.length + mentorList.length + 1,
+                    name: "",
+                    role: "student",
+                    email: "",
+                    age: 0,
+                    postCode: "",
+                    phone: "",
+                    hobbies: [],
+                    url: "",
+                    studyMinutes: 0,
+                    taskCode: 0,
+                    studyLangs: [],
+                    score: 0
+                }
+            );
+            setNewHobbies([]);
+            setNewStudyLangs([]);
+        }
+    }, [newStudent, studentList, newHobbies, newStudyLangs])
+
+    const [newUseLangs, setNewUseLangs] = useState<string[]>([]);
+    const [newUseLang, setNewUseLang] = useState<string>("");
+
+    const onChangeNewUseLang = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewUseLang(e.target.value);
+    }, [])
+
+    const addNewUseLang = useCallback(() => {
+        setNewUseLangs([...newUseLangs, newUseLang]);
+        setNewUseLang("");
+    }, [newUseLangs, newUseLang])
+
+    const changeNewMentor = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewMentor({
+            ...newMentor,
+            [name]: value
+        });
+    }, [newMentor])
+
+    const addNewMentor = useCallback(() => {
+        const mentorData: MentorType = {
+            ...newMentor,
+            hobbies: newHobbies,
+            useLangs: newUseLangs
+        }
+        const check: boolean = checkBlank(mentorData);
+        if (!check) {
+            setMentorList([...mentorList, mentorData]);
+            setNewMentor(
+                {
+                    id: studentList.length + mentorList.length + 1,
+                    name: "",
+                    role: 'mentor',
+                    email: "",
+                    age: 0,
+                    postCode: "",
+                    phone: "",
+                    hobbies: [],
+                    url: "",
+                    experienceDays: 0,
+                    useLangs: [],
+                    availableStartCode: 0,
+                    availableEndCode: 0
+                }
+            )
+        }
+    }, [newHobbies, mentorList, newMentor, newUseLangs])
 
     useEffect(() => {
         // 対応可能な生徒を取得
@@ -180,7 +272,8 @@ export const useMainHook = () => {
         setMentors(mentorList);
         const newUsers: UserType[] = [...studentList, ...mentorList];
         setAllUsers(newUsers.sort(compareFunc));
-    }, [selectedTab, addNewStudent])
+    }, [selectedTab, addNewStudent, addNewMentor])
+
 
     return {
         allUsers,
@@ -199,6 +292,17 @@ export const useMainHook = () => {
         newHobby,
         onChangeNewHobby,
         addNewHobby,
-        addNewStudent
+        addNewStudent,
+        newMentor,
+        changeNewMentor,
+        addNewMentor,
+        newStudyLangs,
+        newStudyLang,
+        onChangeNewStudyLang,
+        addNewStudyLang,
+        newUseLangs,
+        newUseLang,
+        onChangeNewUseLang,
+        addNewUseLang
     };
 }
