@@ -1,7 +1,7 @@
 export type UserType = {
     id: number,
     name: string,
-    role: 'mentor' | 'student',
+    role: 'mentor' | 'student' | "graduate",
     email: string,
     age: number,
     postCode: string,

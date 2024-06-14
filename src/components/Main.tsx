@@ -54,8 +54,8 @@ export const Main: React.FC = memo(() => {
                             <input
                                 type="text"
                                 name="name"
-                                value={(selectedRole === "student") ? newStudent.name : newMentor.name}
-                                onChange={(selectedRole === "student") ? changeNewStudent : changeNewMentor}
+                                value={(selectedRole === "student" || selectedRole === "graduate") ? newStudent.name : newMentor.name}
+                                onChange={(selectedRole === "student" || selectedRole === "graduate") ? changeNewStudent : changeNewMentor}
                             />
                         </td>
                     </tr>
@@ -69,8 +69,8 @@ export const Main: React.FC = memo(() => {
                             <input
                                 type="text"
                                 name="email"
-                                value={(selectedRole === "student") ? newStudent.email : newMentor.email}
-                                onChange={(selectedRole === "student") ? changeNewStudent : changeNewMentor}
+                                value={(selectedRole === "student" || selectedRole === "graduate") ? newStudent.email : newMentor.email}
+                                onChange={(selectedRole === "student" || selectedRole === "graduate") ? changeNewStudent : changeNewMentor}
                             />
                         </td>
                     </tr>
@@ -80,8 +80,8 @@ export const Main: React.FC = memo(() => {
                             <input
                                 type="text"
                                 name="age"
-                                value={(selectedRole === "student") ? newStudent.age : newMentor.age}
-                                onChange={(selectedRole === "student") ? changeNewStudent : changeNewMentor}
+                                value={(selectedRole === "student" || selectedRole === "graduate") ? newStudent.age : newMentor.age}
+                                onChange={(selectedRole === "student" || selectedRole === "graduate") ? changeNewStudent : changeNewMentor}
                             />
                         </td>
                     </tr>
@@ -91,8 +91,8 @@ export const Main: React.FC = memo(() => {
                             <input
                                 type="text"
                                 name="postCode"
-                                value={(selectedRole === "student") ? newStudent.postCode : newMentor.postCode}
-                                onChange={(selectedRole === "student") ? changeNewStudent : changeNewMentor}
+                                value={(selectedRole === "student" || selectedRole === "graduate") ? newStudent.postCode : newMentor.postCode}
+                                onChange={(selectedRole === "student" || selectedRole === "graduate") ? changeNewStudent : changeNewMentor}
                             />
                         </td>
                     </tr>
@@ -102,8 +102,8 @@ export const Main: React.FC = memo(() => {
                             <input
                                 type="text"
                                 name="phone"
-                                value={(selectedRole === "student") ? newStudent.phone : newMentor.phone}
-                                onChange={(selectedRole === "student") ? changeNewStudent : changeNewMentor}
+                                value={(selectedRole === "student" || selectedRole === "graduate") ? newStudent.phone : newMentor.phone}
+                                onChange={(selectedRole === "student" || selectedRole === "graduate") ? changeNewStudent : changeNewMentor}
                             />
                         </td>
                     </tr>
@@ -128,12 +128,12 @@ export const Main: React.FC = memo(() => {
                             <input
                                 type="text"
                                 name="url"
-                                value={(selectedRole === "student") ? newStudent.url : newMentor.url}
-                                onChange={(selectedRole === "student") ? changeNewStudent : changeNewMentor}
+                                value={(selectedRole === "student" || selectedRole === "graduate") ? newStudent.url : newMentor.url}
+                                onChange={(selectedRole === "student" || selectedRole === "graduate") ? changeNewStudent : changeNewMentor}
                             />
                         </td>
                     </tr>
-                    {(selectedRole === "student") ? (
+                    {(selectedRole === "student" || selectedRole === "graduate") ? (
                         <>
                             <tr>
                                 <th>勉強時間</th>
@@ -239,7 +239,7 @@ export const Main: React.FC = memo(() => {
                 </thead>
             </table >
             <button
-                onClick={(selectedRole === "student") ? addNewStudent : addNewMentor}
+                onClick={(selectedRole === "student" || selectedRole === "graduate") ? addNewStudent : addNewMentor}
             >ユーザー追加</button>
             <Tabs
                 defaultActiveKey="all"

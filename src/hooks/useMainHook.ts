@@ -84,10 +84,12 @@ export const useMainHook = () => {
     }, [compareExperienceDays])
 
     // 新規ユーザー登録用
-    const [selectedRole, setSelectedRole] = useState<"student" | "mentor">("student");
+    const [selectedRole, setSelectedRole] = useState<"student" | "mentor" | "graduate">("student");
 
     const changeRole = useCallback(() => {
         if (selectedRole === "student") {
+            setSelectedRole("graduate");
+        } else if (selectedRole === "graduate") {
             setSelectedRole("mentor");
         } else if (selectedRole === "mentor") {
             setSelectedRole("student");
@@ -133,6 +135,7 @@ export const useMainHook = () => {
         const { name, value } = e.target;
         setNewStudent({
             ...newStudent,
+            role: selectedRole === "student" || selectedRole === "graduate" ? selectedRole : "student",
             [name]: value
         });
     }, [newStudent])
